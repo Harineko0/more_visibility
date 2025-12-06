@@ -1,69 +1,94 @@
-# dartv
+more_visibility
+================
 
-`dartv` is a tiny static analyzer that adds Java-style visibility boundaries to
-Dart code using two annotations:
+Custom lint + post-process builder that brings Java-style “protected” and “default” visibility to Dart projects using the annotations `@mprotected` and `@mdefault`.
 
-- `@protected`: declarations are visible to the defining directory **and** its
-  subdirectories.
-- `@packagePrivate`: declarations are visible only to the defining directory.
+What it does
+------------
+- `@mprotected`: declaration/file is usable from the same directory and any subdirectories.
+- `@mdefault`: declaration/file is usable **only** from the same directory.
+- Lint powered by `custom_lint` catches violations at analysis time.
+- Post-process builder automatically stamps generated files (Riverpod, Freezed, etc.) with a file-level annotation so they obey the same visibility rules.
 
-Run `dartv analyze <path>` to flag imports or references that violate those
-rules.
-
-## Install
-
-Add the dependency (local path or git until published):
-
-```bash
-dart pub add dartv
+Quick start
+-----------
+1. Add dependencies:
+```yaml
+dependencies:
+  more_visibility: ^0.1.0
+dev_dependencies:
+  custom_lint: any
+  build_runner: any # if you want the auto-annotation builder
 ```
-
-## How it works
-
-1. Add the annotations to a file or declaration.
-2. Run the CLI against a directory or file tree.
-3. Violations are reported with file/line/column and a non-zero exit code.
-
-File-level annotations are applied to metadata on directives (imports, exports,
-parts, library). Declaration-level annotations override the file default.
-
+2. Enable the plugin in `analysis_options.yaml`:
+```yaml
+analyzer:
+  plugins:
+    - custom_lint
+```
+3. Annotate code:
 ```dart
-import 'package:dartv/dartv.dart' as dartv;
+import 'package:more_visibility/annotations.dart';
 
-@dartv.protected // file default: visible to this dir + subdirs
-import 'dart:math';
+@mprotected // usable from lib/ and lib/**
+final shared = 1;
 
-final publicWithinTree = sqrt(4); // inherits @protected
-
-@dartv.packagePrivate
-final privateToFolder = 2; // visible only to this folder
+@mdefault // usable only inside this directory
+final local = 2;
+```
+4. Run the lints:
+```
+dart run custom_lint
 ```
 
-## CLI
-
-```bash
-dart run bin/dartv.dart analyze path/to/lib
-```
-
-- `--quiet` / `-q` silences the success message.
-- Exit code `0` when clean, `1` when violations exist, `64` on invalid usage.
-
-Example output:
-
-```
-Found 1 visibility violation(s):
- - lib/nested/use_rules.dart:3:8 uses internalToken from lib/rules.dart which is package-private (directory only)
-```
-
-## Library API
-
-You can embed the analyzer:
-
+File-level annotations
+----------------------
+Annotate an entire file to give every declaration the same visibility:
 ```dart
-import 'package:dartv/dartv.dart';
+import 'package:more_visibility/annotations.dart';
 
-final analyzer = DartvAnalyzer();
-final violations = await analyzer.analyzePaths(['lib']);
+@mprotected
+library feature_auth;
+
+// Everything in this file inherits the @mprotected rule.
 ```
 
-See `doc/` for rule details and architecture notes.
+Auto-annotating generated files
+-------------------------------
+Add the post-process builder so generated files copy the declaration-level visibility from their source part:
+```yaml
+# build.yaml in your app/repo
+targets:
+  $default:
+    builders:
+      more_visibility:auto_annotate:
+        enabled: true
+
+post_process_builders:
+  more_visibility:auto_annotate:
+    options:
+      visibility: mprotected # fallback if source has no annotated declaration
+```
+Then run:
+```
+dart run build_runner build --delete-conflicting-outputs
+```
+The builder inserts `@mprotected` (or `@mdefault`) at the top of matching generated files (`*.g.dart`, `*.freezed.dart`, `*.riverpod.dart`) unless they are already annotated.
+The builder copies the first declaration-level `@mprotected`/`@mdefault` from the source part file into the generated file (after `part of`), so generated declarations share the same visibility. File-level annotations are not copied because parts share library metadata automatically.
+
+Example project
+---------------
+See `example/` for a minimal project showing allowed/blocked usages and how the lint reports violations.
+
+Testing
+-------
+Run the package tests, which include an end-to-end lint invocation and builder coverage:
+```
+dart test
+```
+
+More info
+---------
+- `docs/usage.md`: setup steps and idioms
+- `docs/visibility_rules.md`: rule details and edge cases
+- `docs/auto_annotation.md`: builder options and integration notes

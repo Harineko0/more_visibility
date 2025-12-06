@@ -1,6 +1,6 @@
 # Auto-annotation of generated files
 
-Generated code (Freezed, Riverpod, JsonSerializable, etc.) often lands in `*.g.dart` or related files. To keep visibility consistent, the `more_visibility` post-process builder inserts a file-level annotation for you.
+Generated code (Freezed, Riverpod, JsonSerializable, etc.) often lands in `*.g.dart` or related files. To keep visibility consistent, the `more_visibility` post-process builder copies the first declaration-level visibility annotation (`@mprotected` or `@mdefault`) from the source part file into the generated file so generated declarations share the same scope. File-level annotations are not copied (the analyzer already shares library-level annotations across parts).
 
 ## Enable
 Add to your project’s `build.yaml`:
@@ -14,7 +14,7 @@ post_process_builders:
       - ".freezed.dart"
       - ".riverpod.dart"
     options:
-      visibility: mprotected # or mdefault
+      visibility: mprotected # fallback if no declaration-level annotation found
 ```
 
 Then run:
@@ -23,9 +23,10 @@ dart run build_runner build --delete-conflicting-outputs
 ```
 
 ## Behavior
-- If the file already contains `@mprotected` or `@mdefault`, nothing changes.
-- Otherwise the annotation is inserted at the top of the file (after any shebang/comments).
-- Default visibility is `mprotected`; set `visibility: mdefault` to change it.
+- Looks for the first declaration-level `@mprotected`/`@mdefault` in the source part file.
+- If found and the generated file has no visibility annotation, the builder inserts that annotation just after the `part of` directive.
+- If no declaration-level annotation is found, the builder uses the configured fallback (`visibility`, default `mprotected`).
+- File-level annotations (`@mprotected` above `library` or `part`) are **not** copied because Dart parts already share library metadata.
 
 ## Customizing targets
 You can extend `input_extensions` in your own `build.yaml` to cover other generators (e.g. `.gen.dart`).

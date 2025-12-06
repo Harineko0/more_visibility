@@ -3,21 +3,34 @@ import 'package:test/test.dart';
 
 void main() {
   group('AnnotateGeneratedBuilder', () {
-    test('adds annotation when missing', () {
-      const original = '// generated file\nclass A {}\n';
+    test('copies annotation from part source', () {
+      const generated = '''
+// GENERATED CODE
+part of 'feature.dart';
+
+class _\$Feature {}
+''';
+
       final builder = AnnotateGeneratedBuilder(defaultVisibility: 'mprotected');
 
-      final updated = builder.annotateContent(original, 'mprotected');
+      final updated = builder.annotateContent(
+        generated,
+        '@mprotected',
+        'mprotected',
+      );
 
-      expect(updated, contains('@mprotected'));
-      expect(updated, startsWith('// generated file\n@mprotected'));
+      expect(updated, contains("part of 'feature.dart';\n@mprotected"));
     });
 
     test('respects existing annotations', () {
       const original = '@mdefault\nclass A {}\n';
       final builder = AnnotateGeneratedBuilder(defaultVisibility: 'mprotected');
 
-      final updated = builder.annotateContent(original, 'mprotected');
+      final updated = builder.annotateContent(
+        original,
+        '@mprotected',
+        'mprotected',
+      );
 
       expect(updated, original);
     });
