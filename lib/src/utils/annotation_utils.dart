@@ -10,18 +10,6 @@ String? _annotationName(Element element) {
   return element.displayName;
 }
 
-bool _isMoreVisibilityAnnotation(Element? element) {
-  if (element == null) return false;
-  final name = _annotationName(element);
-  if (name != 'mprotected' &&
-      name != 'MProtected' &&
-      name != 'mdefault' &&
-      name != 'MDefault') {
-    return false;
-  }
-  return true;
-}
-
 VisibilityKind? visibilityFromAnnotations(
   Iterable<ElementAnnotation> metadata,
 ) {

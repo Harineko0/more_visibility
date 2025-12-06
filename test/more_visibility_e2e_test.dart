@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:test/test.dart';
 
 void main() {
-  group('custom lint integration', () {
+  group('analysis_server_plugin integration', () {
     test('flags protected/default violations in the example project', () async {
       final pubGet = await Process.run('dart', [
         'pub',
@@ -16,8 +16,7 @@ void main() {
       );
 
       final result = await Process.run('dart', [
-        'run',
-        'custom_lint',
+        'analyze',
       ], workingDirectory: 'example');
 
       final output =
@@ -26,8 +25,8 @@ void main() {
 
       expect(
         result.exitCode,
-        anyOf(0, 1),
-        reason: 'custom_lint failed to run: $output',
+        anyOf(0, 1, 2, 3),
+        reason: 'dart analyze failed to run: $output',
       );
 
       expect(

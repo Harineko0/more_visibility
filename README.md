@@ -1,21 +1,25 @@
 <div align="center">
 <img src="https://img.shields.io/pub/v/more_visibility?label=pub&logo=dart&logoColor=white" alt="Pub">
 <img src="https://github.com/Harineko0/more_visibility/actions/workflows/ci.yml/badge.svg?branch=main" alt="CI">
-<img src="https://img.shields.io/badge/dart-%E2%89%A53.0-blue" alt="Dart SDK">
+<img src="https://img.shields.io/badge/dart-%E2%89%A53.10-blue" alt="Dart SDK">
 <img src="https://img.shields.io/badge/license-MIT-green" alt="License: MIT">
 </div>
 
 more_visibility
 ================
 
-Custom lint + post-process builder that brings Java-style “protected” and “default” visibility to Dart projects using the annotations `@mprotected` and `@mdefault`.
+Analysis server plugin + post-process builder that brings Java-style "protected" and "default" visibility to Dart projects using the annotations `@mprotected` and `@mdefault`.
 
 What it does
 ------------
 - `@mprotected`: declaration/file is usable from the same directory and any subdirectories.
 - `@mdefault`: declaration/file is usable **only** from the same directory.
-- Lint powered by `custom_lint` catches violations at analysis time.
+- Lint powered by `analysis_server_plugin` catches violations at analysis time in IDEs and `dart analyze`.
 - Post-process builder automatically stamps generated files (Riverpod, Freezed, etc.) with a file-level annotation so they obey the same visibility rules.
+
+Requirements
+------------
+- Dart SDK 3.10.0 or later (Flutter SDK 3.38.0 or later)
 
 Quick start
 -----------
@@ -24,15 +28,19 @@ Quick start
 dependencies:
   more_visibility_annotation: ^0.1.0
 dev_dependencies:
-  more_visibility: ^0.1.0 # custom_lint plugin
-  custom_lint: any
+  more_visibility: ^0.1.3 # analysis server plugin
   build_runner: any # if you want the auto-annotation builder
 ```
 2. Enable the plugin in `analysis_options.yaml`:
 ```yaml
-analyzer:
-  plugins:
-    - custom_lint
+plugins:
+  more_visibility: ^0.1.3
+```
+Or for local development:
+```yaml
+plugins:
+  more_visibility:
+    path: path/to/more_visibility
 ```
 3. Annotate code:
 ```dart
@@ -46,8 +54,35 @@ final local = 2;
 ```
 4. Run the lints:
 ```
-dart run custom_lint
+dart analyze
 ```
+Or your IDE will automatically show violations as you code.
+
+Configuring severity levels
+----------------------------
+By default, visibility violations are reported as **errors**. You can change the severity level in your `analysis_options.yaml`:
+
+```yaml
+analyzer:
+  errors:
+    # Change all visibility violations to warnings
+    more_visibility_protected: warning
+    more_visibility_module_default: warning
+
+    # Or set to info (won't fail CI)
+    more_visibility_protected: info
+    more_visibility_module_default: info
+
+    # Or ignore completely
+    more_visibility_protected: ignore
+    more_visibility_module_default: ignore
+```
+
+Available severity levels:
+- `error` (default) - Causes analysis to fail
+- `warning` - Shown as warning, doesn't fail analysis by default
+- `info` - Informational only
+- `ignore` - Suppresses the diagnostic
 
 File-level annotations
 ----------------------

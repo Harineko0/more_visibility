@@ -1,70 +1,104 @@
 import 'dart:collection';
 
+import 'package:analyzer/analysis_rule/analysis_rule.dart';
+import 'package:analyzer/analysis_rule/rule_context.dart';
+import 'package:analyzer/analysis_rule/rule_visitor_registry.dart';
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/ast/token.dart';
+import 'package:analyzer/dart/ast/visitor.dart';
 import 'package:analyzer/dart/element/element.dart';
+import 'package:analyzer/error/error.dart';
 import 'package:analyzer/error/listener.dart';
-import 'package:custom_lint_builder/custom_lint_builder.dart';
 import 'package:path/path.dart' as p;
 
 import '../utils/annotation_utils.dart';
 
-class MoreVisibilityRule extends DartLintRule {
-  MoreVisibilityRule() : super(code: _baseCode);
+class MoreVisibilityRule extends AnalysisRule {
+  MoreVisibilityRule()
+    : super(
+        name: 'more_visibility',
+        description:
+            'Enforces directory-scoped visibility via @mprotected and @mdefault annotations.',
+      );
+
+  late DiagnosticReporter _reporter;
+
+  @override
+  set reporter(DiagnosticReporter value) {
+    super.reporter = value;
+    _reporter = value;
+  }
 
   static const _baseCode = LintCode(
-    name: 'more_visibility',
-    problemMessage:
-        'This declaration is not visible from the current file or directory.',
+    'more_visibility',
+    'This declaration is not visible from the current file or directory.',
     correctionMessage:
         'Limit usage to files in the same directory (for @mdefault) or the same directory and subdirectories (for @mprotected).',
-    url: 'https://pub.dev/packages/more_visibility',
+    severity: DiagnosticSeverity.ERROR,
   );
 
   static const _protectedCode = LintCode(
-    name: 'more_visibility_protected',
-    problemMessage:
-        '`{0}` is @mprotected; only files in the same directory or subdirectories may access it. Declared at {1}.',
+    'more_visibility_protected',
+    '`{0}` is @mprotected; only files in the same directory or subdirectories may access it. Declared at {1}.',
     correctionMessage:
         'Move the usage under the declaring directory or remove @mprotected.',
-    url: 'https://pub.dev/packages/more_visibility',
+    severity: DiagnosticSeverity.ERROR,
   );
 
   static const _defaultCode = LintCode(
-    name: 'more_visibility_module_default',
-    problemMessage:
-        '`{0}` is @mdefault; only files in the same directory may access it. Declared at {1}.',
+    'more_visibility_module_default',
+    '`{0}` is @mdefault; only files in the same directory may access it. Declared at {1}.',
     correctionMessage:
         'Move the usage into the same directory or drop @mdefault.',
-    url: 'https://pub.dev/packages/more_visibility',
+    severity: DiagnosticSeverity.ERROR,
   );
 
-  static final _cacheKey = Object();
+  @override
+  DiagnosticCode get diagnosticCode => _baseCode;
+
+  // Cache is now per-file instead of shared across all files
+  // This is managed by the visitor instance
 
   @override
-  void run(
-    CustomLintResolver resolver,
-    DiagnosticReporter reporter,
-    CustomLintContext context,
+  void registerNodeProcessors(
+    RuleVisitorRegistry registry,
+    RuleContext context,
   ) {
-    final cache =
-        context.sharedState.putIfAbsent(_cacheKey, () => _FileAnnotationCache())
-            as _FileAnnotationCache;
-
-    context.registry.addCompilationUnit((node) {
-      cache.capture(node);
-    });
-
-    context.registry.addSimpleIdentifier((node) {
-      _checkIdentifier(node, reporter, cache);
-    });
+    final visitor = _Visitor(this, context);
+    registry.addCompilationUnit(this, visitor);
+    registry.addSimpleIdentifier(this, visitor);
   }
 
-  void _checkIdentifier(
-    SimpleIdentifier node,
-    DiagnosticReporter reporter,
-    _FileAnnotationCache cache,
+  /// Helper method to report violations with specific diagnostic codes.
+  void reportViolation(
+    AstNode node,
+    DiagnosticCode code,
+    List<Object> arguments,
   ) {
+    if (!node.isSynthetic) {
+      _reporter.atNode(node, code, arguments: arguments);
+    }
+  }
+}
+
+class _Visitor extends SimpleAstVisitor<void> {
+  _Visitor(this.rule, this.context);
+
+  final MoreVisibilityRule rule;
+  final RuleContext context;
+  final _cache = _FileAnnotationCache();
+
+  @override
+  void visitCompilationUnit(CompilationUnit node) {
+    _cache.capture(node);
+  }
+
+  @override
+  void visitSimpleIdentifier(SimpleIdentifier node) {
+    _checkIdentifier(node);
+  }
+
+  void _checkIdentifier(SimpleIdentifier node) {
     if (node.inDeclarationContext()) return;
     final element = node.element;
     if (element == null) return;
@@ -85,8 +119,10 @@ class MoreVisibilityRule extends DartLintRule {
 
     final elementVisibility =
         visibilityFromAnnotations(rootElement.metadata.annotations) ??
-        cache.visibilityForPath(declSource.fullName) ??
-        visibilityFromAnnotations(rootElement.library?.metadata.annotations ?? const []);
+        _cache.visibilityForPath(declSource.fullName) ??
+        visibilityFromAnnotations(
+          rootElement.library?.metadata.annotations ?? const [],
+        );
 
     if (elementVisibility == null) return;
 
@@ -105,10 +141,11 @@ class MoreVisibilityRule extends DartLintRule {
         ? 'this symbol'
         : rootElement.displayName;
     final code = elementVisibility == VisibilityKind.moduleDefault
-        ? _defaultCode
-        : _protectedCode;
+        ? MoreVisibilityRule._defaultCode
+        : MoreVisibilityRule._protectedCode;
 
-    reporter.atNode(node, code, arguments: [name, declDir]);
+    // Report using the specific diagnostic code (not the base code)
+    rule.reportViolation(node, code, [name, declDir]);
   }
 
   Element? _topLevelElement(Element element) {

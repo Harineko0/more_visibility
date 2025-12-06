@@ -1,5 +1,3 @@
-library more_visibility_annotation;
-
 /// Marks a declaration or a library as "module protected".
 ///
 /// - `@mprotected` on a declaration: it can be referenced from files in the
