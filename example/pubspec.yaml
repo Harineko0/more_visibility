@@ -9,10 +9,6 @@ dependencies:
   more_visibility_annotation: ^0.1.0
 
 dev_dependencies:
-  custom_lint: any
-  lints: any
-  more_visibility:
-    path: ..
-
-dependency_overrides:
+  custom_lint: ^0.8.1
+  lints: ^6.0.0
   more_visibility: ^0.1.1
