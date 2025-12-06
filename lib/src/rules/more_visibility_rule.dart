@@ -44,7 +44,7 @@ class MoreVisibilityRule extends DartLintRule {
   @override
   void run(
     CustomLintResolver resolver,
-    ErrorReporter reporter,
+    DiagnosticReporter reporter,
     CustomLintContext context,
   ) {
     final cache =
@@ -62,31 +62,31 @@ class MoreVisibilityRule extends DartLintRule {
 
   void _checkIdentifier(
     SimpleIdentifier node,
-    ErrorReporter reporter,
+    DiagnosticReporter reporter,
     _FileAnnotationCache cache,
   ) {
     if (node.inDeclarationContext()) return;
-    final element = node.staticElement;
+    final element = node.element;
     if (element == null) return;
 
     final rootElement = _topLevelElement(element);
     if (rootElement == null) return;
 
-    final declSource = rootElement.source;
+    final declSource = rootElement.firstFragment.libraryFragment?.source;
     if (declSource == null || declSource.fullName.isEmpty) return;
 
     final useUnit = node.root is CompilationUnit
         ? node.root as CompilationUnit
         : null;
-    final useSource = useUnit?.declaredElement?.source;
+    final useSource = useUnit?.declaredFragment?.source;
     if (useSource == null) return;
 
     if (useSource.fullName == declSource.fullName) return;
 
     final elementVisibility =
-        visibilityFromAnnotations(rootElement.metadata) ??
+        visibilityFromAnnotations(rootElement.metadata.annotations) ??
         cache.visibilityForPath(declSource.fullName) ??
-        visibilityFromAnnotations(rootElement.library?.metadata ?? const []);
+        visibilityFromAnnotations(rootElement.library?.metadata.annotations ?? const []);
 
     if (elementVisibility == null) return;
 
@@ -108,7 +108,7 @@ class MoreVisibilityRule extends DartLintRule {
         ? _defaultCode
         : _protectedCode;
 
-    reporter.reportErrorForNode(code, node, [name, declDir]);
+    reporter.atNode(node, code, arguments: [name, declDir]);
   }
 
   Element? _topLevelElement(Element element) {
@@ -117,10 +117,10 @@ class MoreVisibilityRule extends DartLintRule {
       current = current.variable;
     }
     while (current.enclosingElement != null &&
-        current.enclosingElement is! CompilationUnitElement) {
+        current.enclosingElement is! LibraryElement) {
       current = current.enclosingElement!;
     }
-    return current.enclosingElement is CompilationUnitElement ? current : null;
+    return current.enclosingElement is LibraryElement ? current : null;
   }
 }
 
@@ -128,7 +128,7 @@ class _FileAnnotationCache {
   final _byPath = HashMap<String, VisibilityKind?>();
 
   void capture(CompilationUnit unit) {
-    final path = unit.declaredElement?.source.fullName;
+    final path = unit.declaredFragment?.source.fullName;
     if (path == null) return;
     _byPath[path] = _annotationFromUnit(unit);
   }
