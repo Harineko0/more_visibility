@@ -16,7 +16,7 @@ jobs:
         run: dart pub get
       - name: Pub get (annotations)
         run: dart pub get
-        working-directory: packages/more_visibility_annotation
+        working-directory: more_visibility_annotation
       - name: Pub get (example)
         run: dart pub get
         working-directory: example
