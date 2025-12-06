@@ -9,3 +9,5 @@ pubspec.lock
 .kiri
 .serena
 .idea
+
+*.log
