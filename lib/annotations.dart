@@ -2,7 +2,7 @@
 ///
 /// Apply [mprotected] or [mdefault] to a library (file-level) or to individual
 /// top-level declarations to restrict their visibility to neighboring files.
-library more_visibility.annotations;
+library;
 
 /// Marks a declaration or a library as "module protected".
 ///

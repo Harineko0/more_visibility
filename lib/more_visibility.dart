@@ -1,4 +1,4 @@
-library more_visibility;
+library;
 
 export 'annotations.dart';
 
