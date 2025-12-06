@@ -10,4 +10,4 @@ dependencies:
 
 dev_dependencies:
   custom_lint: any
-  more_visibility: ^0.1.0
+  lints: any
