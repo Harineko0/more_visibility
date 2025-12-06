@@ -6,10 +6,8 @@ environment:
   sdk: ^3.9.2
 
 dependencies:
-  more_visibility:
-    path: ..
+  more_visibility: ^0.1.0
 
 dev_dependencies:
   custom_lint: any
-  more_visibility:
-    path: ..
+  more_visibility: ^0.1.0
