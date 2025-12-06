@@ -1,6 +1,6 @@
-library;
+library more_visibility;
 
-export 'annotations.dart';
+export 'package:more_visibility_annotation/more_visibility_annotation.dart';
 
 import 'package:custom_lint_builder/custom_lint_builder.dart';
 

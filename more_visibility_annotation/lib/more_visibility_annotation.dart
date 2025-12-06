@@ -1,8 +1,4 @@
-/// Annotations used by the more_visibility custom lint package.
-///
-/// Apply [mprotected] or [mdefault] to a library (file-level) or to individual
-/// top-level declarations to restrict their visibility to neighboring files.
-library;
+library more_visibility_annotation;
 
 /// Marks a declaration or a library as "module protected".
 ///

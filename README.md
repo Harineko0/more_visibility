@@ -1,3 +1,10 @@
+<div align="center">
+<img src="https://img.shields.io/pub/v/more_visibility?label=pub&logo=dart&logoColor=white" alt="Pub">
+<img src="https://github.com/Harineko0/more_visibility/actions/workflows/ci.yml/badge.svg?branch=main" alt="CI">
+<img src="https://img.shields.io/badge/dart-%E2%89%A53.0-blue" alt="Dart SDK">
+<img src="https://img.shields.io/badge/license-MIT-green" alt="License: MIT">
+</div>
+
 more_visibility
 ================
 
@@ -15,8 +22,9 @@ Quick start
 1. Add dependencies:
 ```yaml
 dependencies:
-  more_visibility: ^0.1.0
+  more_visibility_annotation: ^0.1.0
 dev_dependencies:
+  more_visibility: ^0.1.0 # custom_lint plugin
   custom_lint: any
   build_runner: any # if you want the auto-annotation builder
 ```
@@ -28,7 +36,7 @@ analyzer:
 ```
 3. Annotate code:
 ```dart
-import 'package:more_visibility/annotations.dart';
+import 'package:more_visibility_annotation/more_visibility_annotation.dart';
 
 @mprotected // usable from lib/ and lib/**
 final shared = 1;
@@ -45,7 +53,7 @@ File-level annotations
 ----------------------
 Annotate an entire file to give every declaration the same visibility:
 ```dart
-import 'package:more_visibility/annotations.dart';
+import 'package:more_visibility_annotation/more_visibility_annotation.dart';
 
 @mprotected
 library feature_auth;

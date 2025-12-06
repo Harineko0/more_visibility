@@ -3,8 +3,9 @@
 ## Install
 ```yaml
 dependencies:
-  more_visibility: ^0.1.0
+  more_visibility_annotation: ^0.1.0
 dev_dependencies:
+  more_visibility: ^0.1.0
   custom_lint: any
 ```
 
@@ -21,7 +22,7 @@ analyzer:
 - `@mdefault`: usable only from the declaration’s directory.
 
 ```dart
-import 'package:more_visibility/annotations.dart';
+import 'package:more_visibility_annotation/more_visibility_annotation.dart';
 
 @mprotected
 final shared = 1;
@@ -33,7 +34,7 @@ final local = 2;
 ## Annotate a file
 Place the annotation above the library or first directive to apply it to every top-level declaration:
 ```dart
-import 'package:more_visibility/annotations.dart';
+import 'package:more_visibility_annotation/more_visibility_annotation.dart';
 
 @mprotected
 library feature_profile;
@@ -49,4 +50,4 @@ dart run custom_lint
 ## Typical violations
 - Accessing an `@mdefault` symbol from a subdirectory.
 - Accessing an `@mprotected` symbol from a parent or sibling directory.
-- Accessing any annotated symbol without importing `package:more_visibility/annotations.dart` in the declaring file.
+- Accessing any annotated symbol without importing `package:more_visibility_annotation/more_visibility_annotation.dart` in the declaring file.
