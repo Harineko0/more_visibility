@@ -1,0 +1,15 @@
+name: more_visibility_example
+description: Example showcasing more_visibility custom lint.
+version: 0.0.1
+
+environment:
+  sdk: ^3.9.2
+
+dependencies:
+  more_visibility:
+    path: ..
+
+dev_dependencies:
+  custom_lint: any
+  more_visibility:
+    path: ..

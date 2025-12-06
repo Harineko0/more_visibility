@@ -1,5 +1,5 @@
-name: dartv
-description: Static visibility analyzer for Dart that enforces protected and package-private style boundaries.
+name: more_visibility
+description: "Custom lint and builder bringing directory-scoped visibility via @mprotected and @mdefault annotations."
 version: 0.1.0
 # repository: https://github.com/my_org/my_repo
 
@@ -9,12 +9,16 @@ environment:
 # Add regular dependencies here.
 dependencies:
   analyzer: ^6.4.1
+  build: ^2.3.1
   args: ^2.5.0
   path: ^1.9.0
+  custom_lint_builder: ^0.6.0
 
 dev_dependencies:
   lints: ^6.0.0
   test: ^1.25.6
+  custom_lint: ^0.6.0
+  build_runner: ^2.4.13
 
 executables:
   dartv: dartv

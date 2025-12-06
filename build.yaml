@@ -1,0 +1,19 @@
+targets:
+  $default:
+    builders:
+      more_visibility:auto_annotate:
+        enabled: true
+        options:
+          visibility: mprotected
+
+post_process_builders:
+  more_visibility:auto_annotate:
+    import: "package:more_visibility/auto_annotate_builder.dart"
+    builder_factory: "annotateGenerated"
+    input_extensions:
+      - ".g.dart"
+      - ".freezed.dart"
+      - ".riverpod.dart"
+    defaults:
+      options:
+        visibility: mprotected

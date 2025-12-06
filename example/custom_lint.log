@@ -1,0 +1,325 @@
+The request analysis.setContextRoots failed with the following error:
+RequestErrorCode.PLUGIN_ERROR
+Failed to decode .dart_tool/package_config.json at /Users/hari/proj/dartv/example. Make sure to run `pub get` first.
+PathNotFoundException: Cannot open file, path = '/Users/hari/proj/dartv/example/.dart_tool/package_config.json' (OS Error: No such file or directory, errno = 2)
+#0      _checkForErrorResponse (dart:io/common.dart:58)
+#1      _File.open.<anonymous closure> (dart:io/file_impl.dart:442)
+#2      _rootRunUnary (dart:async/zone.dart:1538)
+#3      _CustomZone.runUnary (dart:async/zone.dart:1429)
+<asynchronous suspension>
+#4      _File.readAsBytes.<anonymous closure> (dart:io/file_impl.dart:649)
+<asynchronous suspension>
+#5      parsePackageConfig (package:custom_lint_core/src/package_utils.dart:161)
+<asynchronous suspension>
+#6      CustomLintProject.parse (package:custom_lint/src/workspace.dart:996)
+<asynchronous suspension>
+#7      Future.wait.<anonymous closure> (dart:async/future.dart:525)
+<asynchronous suspension>
+#8      CustomLintWorkspace.fromContextRoots (package:custom_lint/src/workspace.dart:489)
+<asynchronous suspension>
+#9      SocketCustomLintServerToClientChannel.create (package:custom_lint/src/v2/server_to_client_channel.dart:54)
+<asynchronous suspension>
+#10     CustomLintServer._maybeSpawnCustomLintPlugin (package:custom_lint/src/v2/custom_lint_analyzer_plugin.dart:358)
+<asynchronous suspension>
+#11     CustomLintServer._handleAnalysisSetContextRoots.<anonymous closure> (package:custom_lint/src/v2/custom_lint_analyzer_plugin.dart:339)
+<asynchronous suspension>
+#12     PendingOperation.run (package:custom_lint/src/async_operation.dart:22)
+<asynchronous suspension>
+#13     CustomLintServer._handleRequest (package:custom_lint/src/v2/custom_lint_analyzer_plugin.dart:171)
+<asynchronous suspension>
+
+at:
+#0      CustomLintProject.parse.<anonymous closure> (package:custom_lint/src/workspace.dart:999)
+#1      _rootRunBinary (dart:async/zone.dart:1560)
+#2      _CustomZone.runBinary (dart:async/zone.dart:1436)
+#3      _FutureListener.handleError (dart:async/future_impl.dart:237)
+#4      Future._propagateToListeners.handleError (dart:async/future_impl.dart:960)
+#5      Future._propagateToListeners (dart:async/future_impl.dart:981)
+#6      Future._completeErrorObject (dart:async/future_impl.dart:738)
+#7      Future._completeError (dart:async/future_impl.dart:742)
+<asynchronous suspension>
+
+The request analysis.setSubscriptions failed with the following error:
+RequestErrorCode.PLUGIN_ERROR
+Failed to decode .dart_tool/package_config.json at /Users/hari/proj/dartv/example. Make sure to run `pub get` first.
+PathNotFoundException: Cannot open file, path = '/Users/hari/proj/dartv/example/.dart_tool/package_config.json' (OS Error: No such file or directory, errno = 2)
+#0      _checkForErrorResponse (dart:io/common.dart:58)
+#1      _File.open.<anonymous closure> (dart:io/file_impl.dart:442)
+#2      _rootRunUnary (dart:async/zone.dart:1538)
+#3      _CustomZone.runUnary (dart:async/zone.dart:1429)
+<asynchronous suspension>
+#4      _File.readAsBytes.<anonymous closure> (dart:io/file_impl.dart:649)
+<asynchronous suspension>
+#5      parsePackageConfig (package:custom_lint_core/src/package_utils.dart:161)
+<asynchronous suspension>
+#6      CustomLintProject.parse (package:custom_lint/src/workspace.dart:996)
+<asynchronous suspension>
+#7      Future.wait.<anonymous closure> (dart:async/future.dart:525)
+<asynchronous suspension>
+#8      CustomLintWorkspace.fromContextRoots (package:custom_lint/src/workspace.dart:489)
+<asynchronous suspension>
+#9      SocketCustomLintServerToClientChannel.create (package:custom_lint/src/v2/server_to_client_channel.dart:54)
+<asynchronous suspension>
+#10     CustomLintServer._maybeSpawnCustomLintPlugin (package:custom_lint/src/v2/custom_lint_analyzer_plugin.dart:358)
+<asynchronous suspension>
+#11     CustomLintServer._handleAnalysisSetContextRoots.<anonymous closure> (package:custom_lint/src/v2/custom_lint_analyzer_plugin.dart:339)
+<asynchronous suspension>
+#12     PendingOperation.run (package:custom_lint/src/async_operation.dart:22)
+<asynchronous suspension>
+#13     CustomLintServer._handleRequest (package:custom_lint/src/v2/custom_lint_analyzer_plugin.dart:171)
+<asynchronous suspension>
+
+at:
+#0      CustomLintProject.parse.<anonymous closure> (package:custom_lint/src/workspace.dart:999)
+#1      _rootRunBinary (dart:async/zone.dart:1560)
+#2      _CustomZone.runBinary (dart:async/zone.dart:1436)
+#3      _FutureListener.handleError (dart:async/future_impl.dart:237)
+#4      Future._propagateToListeners.handleError (dart:async/future_impl.dart:960)
+#5      Future._propagateToListeners (dart:async/future_impl.dart:981)
+#6      Future._completeErrorObject (dart:async/future_impl.dart:738)
+#7      Future._completeError (dart:async/future_impl.dart:742)
+<asynchronous suspension>
+
+The request analysis.updateContent failed with the following error:
+RequestErrorCode.PLUGIN_ERROR
+Failed to decode .dart_tool/package_config.json at /Users/hari/proj/dartv/example. Make sure to run `pub get` first.
+PathNotFoundException: Cannot open file, path = '/Users/hari/proj/dartv/example/.dart_tool/package_config.json' (OS Error: No such file or directory, errno = 2)
+#0      _checkForErrorResponse (dart:io/common.dart:58)
+#1      _File.open.<anonymous closure> (dart:io/file_impl.dart:442)
+#2      _rootRunUnary (dart:async/zone.dart:1538)
+#3      _CustomZone.runUnary (dart:async/zone.dart:1429)
+<asynchronous suspension>
+#4      _File.readAsBytes.<anonymous closure> (dart:io/file_impl.dart:649)
+<asynchronous suspension>
+#5      parsePackageConfig (package:custom_lint_core/src/package_utils.dart:161)
+<asynchronous suspension>
+#6      CustomLintProject.parse (package:custom_lint/src/workspace.dart:996)
+<asynchronous suspension>
+#7      Future.wait.<anonymous closure> (dart:async/future.dart:525)
+<asynchronous suspension>
+#8      CustomLintWorkspace.fromContextRoots (package:custom_lint/src/workspace.dart:489)
+<asynchronous suspension>
+#9      SocketCustomLintServerToClientChannel.create (package:custom_lint/src/v2/server_to_client_channel.dart:54)
+<asynchronous suspension>
+#10     CustomLintServer._maybeSpawnCustomLintPlugin (package:custom_lint/src/v2/custom_lint_analyzer_plugin.dart:358)
+<asynchronous suspension>
+#11     CustomLintServer._handleAnalysisSetContextRoots.<anonymous closure> (package:custom_lint/src/v2/custom_lint_analyzer_plugin.dart:339)
+<asynchronous suspension>
+#12     PendingOperation.run (package:custom_lint/src/async_operation.dart:22)
+<asynchronous suspension>
+#13     CustomLintServer._handleRequest (package:custom_lint/src/v2/custom_lint_analyzer_plugin.dart:171)
+<asynchronous suspension>
+
+at:
+#0      CustomLintProject.parse.<anonymous closure> (package:custom_lint/src/workspace.dart:999)
+#1      _rootRunBinary (dart:async/zone.dart:1560)
+#2      _CustomZone.runBinary (dart:async/zone.dart:1436)
+#3      _FutureListener.handleError (dart:async/future_impl.dart:237)
+#4      Future._propagateToListeners.handleError (dart:async/future_impl.dart:960)
+#5      Future._propagateToListeners (dart:async/future_impl.dart:981)
+#6      Future._completeErrorObject (dart:async/future_impl.dart:738)
+#7      Future._completeError (dart:async/future_impl.dart:742)
+<asynchronous suspension>
+
+The request analysis.setPriorityFiles failed with the following error:
+RequestErrorCode.PLUGIN_ERROR
+Failed to decode .dart_tool/package_config.json at /Users/hari/proj/dartv/example. Make sure to run `pub get` first.
+PathNotFoundException: Cannot open file, path = '/Users/hari/proj/dartv/example/.dart_tool/package_config.json' (OS Error: No such file or directory, errno = 2)
+#0      _checkForErrorResponse (dart:io/common.dart:58)
+#1      _File.open.<anonymous closure> (dart:io/file_impl.dart:442)
+#2      _rootRunUnary (dart:async/zone.dart:1538)
+#3      _CustomZone.runUnary (dart:async/zone.dart:1429)
+<asynchronous suspension>
+#4      _File.readAsBytes.<anonymous closure> (dart:io/file_impl.dart:649)
+<asynchronous suspension>
+#5      parsePackageConfig (package:custom_lint_core/src/package_utils.dart:161)
+<asynchronous suspension>
+#6      CustomLintProject.parse (package:custom_lint/src/workspace.dart:996)
+<asynchronous suspension>
+#7      Future.wait.<anonymous closure> (dart:async/future.dart:525)
+<asynchronous suspension>
+#8      CustomLintWorkspace.fromContextRoots (package:custom_lint/src/workspace.dart:489)
+<asynchronous suspension>
+#9      SocketCustomLintServerToClientChannel.create (package:custom_lint/src/v2/server_to_client_channel.dart:54)
+<asynchronous suspension>
+#10     CustomLintServer._maybeSpawnCustomLintPlugin (package:custom_lint/src/v2/custom_lint_analyzer_plugin.dart:358)
+<asynchronous suspension>
+#11     CustomLintServer._handleAnalysisSetContextRoots.<anonymous closure> (package:custom_lint/src/v2/custom_lint_analyzer_plugin.dart:339)
+<asynchronous suspension>
+#12     PendingOperation.run (package:custom_lint/src/async_operation.dart:22)
+<asynchronous suspension>
+#13     CustomLintServer._handleRequest (package:custom_lint/src/v2/custom_lint_analyzer_plugin.dart:171)
+<asynchronous suspension>
+
+at:
+#0      CustomLintProject.parse.<anonymous closure> (package:custom_lint/src/workspace.dart:999)
+#1      _rootRunBinary (dart:async/zone.dart:1560)
+#2      _CustomZone.runBinary (dart:async/zone.dart:1436)
+#3      _FutureListener.handleError (dart:async/future_impl.dart:237)
+#4      Future._propagateToListeners.handleError (dart:async/future_impl.dart:960)
+#5      Future._propagateToListeners (dart:async/future_impl.dart:981)
+#6      Future._completeErrorObject (dart:async/future_impl.dart:738)
+#7      Future._completeError (dart:async/future_impl.dart:742)
+<asynchronous suspension>
+
+[custom_lint] 2025-12-06T21:18:48.196998 Loading dynamic library failed: not a Mach-O shared object
+[custom_lint] 2025-12-06T21:18:48.196998 lib/custom_lint_client.dart is not an AOT snapshot, it cannot be run with 'dartaotruntime'
+[custom_lint] 2025-12-06T21:18:48.196998
+[custom_lint] 2025-12-06T21:18:48.196998
+Failed to start pluginsThe request analysis.setContextRoots failed with the following error:
+RequestErrorCode.PLUGIN_ERROR
+Bad state: Failed to start the plugins.
+at:
+#0      SocketCustomLintServerToClientChannel._checkInitializationFail.<anonymous closure> (package:custom_lint/src/v2/server_to_client_channel.dart:223)
+<asynchronous suspension>
+#1      Future.any.onValue (dart:async/future.dart:616)
+<asynchronous suspension>
+
+[custom_lint] 2025-12-06T21:18:56.101041 /Users/hari/proj/dartv/lib/src/rules/more_visibility_rule.dart:28:5: Error: Type 'LinterContext' not found.
+[custom_lint] 2025-12-06T21:18:56.101041     LinterContext context,
+[custom_lint] 2025-12-06T21:18:56.101041     ^^^^^^^^^^^^^
+[custom_lint] 2025-12-06T21:18:56.101041 /Users/hari/proj/dartv/lib/src/rules/more_visibility_rule.dart:43:5: Error: Type 'LinterContext' not found.
+[custom_lint] 2025-12-06T21:18:56.101041     LinterContext context,
+[custom_lint] 2025-12-06T21:18:56.101041     ^^^^^^^^^^^^^
+[custom_lint] 2025-12-06T21:18:56.101041 /Users/hari/proj/dartv/lib/src/rules/more_visibility_rule.dart:11:7: Error: The non-abstract class 'MoreVisibilityRule' is missing implementations for these members:
+[custom_lint] 2025-12-06T21:18:56.101041  - LintRule.run
+[custom_lint] 2025-12-06T21:18:56.101041 Try to either
+[custom_lint] 2025-12-06T21:18:56.101041  - provide an implementation,
+[custom_lint] 2025-12-06T21:18:56.101041  - inherit an implementation from a superclass or mixin,
+[custom_lint] 2025-12-06T21:18:56.101041  - mark the class as abstract, or
+[custom_lint] 2025-12-06T21:18:56.101041  - provide a 'noSuchMethod' implementation.
+[custom_lint] 2025-12-06T21:18:56.101041
+[custom_lint] 2025-12-06T21:18:56.101041 class MoreVisibilityRule extends DartLintRule {
+[custom_lint] 2025-12-06T21:18:56.101041       ^^^^^^^^^^^^^^^^^^
+[custom_lint] 2025-12-06T21:18:56.101041 /Users/hari/.pub-cache/hosted/pub.dev/custom_lint_core-0.6.3/lib/src/lint_rule.dart:98:8: Context: 'LintRule.run' is defined here.
+[custom_lint] 2025-12-06T21:18:56.101041   void run(
+[custom_lint] 2025-12-06T21:18:56.101041        ^^^
+[custom_lint] 2025-12-06T21:18:56.101041 /Users/hari/proj/dartv/lib/src/rules/more_visibility_rule.dart:28:5: Error: 'LinterContext' isn't a type.
+[custom_lint] 2025-12-06T21:18:56.101041     LinterContext context,
+[custom_lint] 2025-12-06T21:18:56.101041     ^^^^^^^^^^^^^
+[custom_lint] 2025-12-06T21:18:56.101041 /Users/hari/proj/dartv/lib/src/rules/more_visibility_rule.dart:32:33: Error: The argument type 'MoreVisibilityRule' can't be assigned to the parameter type 'String'.
+[custom_lint] 2025-12-06T21:18:56.101041  - 'MoreVisibilityRule' is from 'package:more_visibility/src/rules/more_visibility_rule.dart' ('/Users/hari/proj/dartv/lib/src/rules/more_visibility_rule.dart').
+[custom_lint] 2025-12-06T21:18:56.101041     registry.addCompilationUnit(this, (unit) {
+[custom_lint] 2025-12-06T21:18:56.101041                                 ^
+[custom_lint] 2025-12-06T21:18:56.101041 /Users/hari/proj/dartv/lib/src/rules/more_visibility_rule.dart:36:34: Error: The argument type 'MoreVisibilityRule' can't be assigned to the parameter type 'String'.
+[custom_lint] 2025-12-06T21:18:56.101041  - 'MoreVisibilityRule' is from 'package:more_visibility/src/rules/more_visibility_rule.dart' ('/Users/hari/proj/dartv/lib/src/rules/more_visibility_rule.dart').
+[custom_lint] 2025-12-06T21:18:56.101041     registry.addSimpleIdentifier(this, (node) {
+[custom_lint] 2025-12-06T21:18:56.101041                                  ^
+[custom_lint] 2025-12-06T21:18:56.101041 /Users/hari/proj/dartv/lib/src/rules/more_visibility_rule.dart:43:5: Error: 'LinterContext' isn't a type.
+[custom_lint] 2025-12-06T21:18:56.101041     LinterContext context,
+[custom_lint] 2025-12-06T21:18:56.101041     ^^^^^^^^^^^^^
+[custom_lint] 2025-12-06T21:18:56.101041 /Users/hari/proj/dartv/lib/src/rules/more_visibility_rule.dart:90:5: Error: The method 'reportLint' isn't defined for the type 'MoreVisibilityRule'.
+[custom_lint] 2025-12-06T21:18:56.101041  - 'MoreVisibilityRule' is from 'package:more_visibility/src/rules/more_visibility_rule.dart' ('/Users/hari/proj/dartv/lib/src/rules/more_visibility_rule.dart').
+[custom_lint] 2025-12-06T21:18:56.101041 Try correcting the name to the name of an existing method, or defining a method named 'reportLint'.
+[custom_lint] 2025-12-06T21:18:56.101041     reportLint(
+[custom_lint] 2025-12-06T21:18:56.101041     ^^^^^^^^^^
+[custom_lint] 2025-12-06T21:18:56.101041 /Users/hari/proj/dartv/lib/src/rules/more_visibility_rule.dart:132:67: Error: The argument type 'NodeList<Annotation>' can't be assigned to the parameter type 'Iterable<ElementAnnotation>'.
+[custom_lint] 2025-12-06T21:18:56.101041  - 'NodeList' is from 'package:analyzer/src/dart/ast/ast.dart' ('/Users/hari/.pub-cache/hosted/pub.dev/analyzer-6.4.1/lib/src/dart/ast/ast.dart').
+[custom_lint] 2025-12-06T21:18:56.101041  - 'Annotation' is from 'package:analyzer/src/dart/ast/ast.dart' ('/Users/hari/.pub-cache/hosted/pub.dev/analyzer-6.4.1/lib/src/dart/ast/ast.dart').
+[custom_lint] 2025-12-06T21:18:56.101041  - 'Iterable' is from 'dart:core'.
+[custom_lint] 2025-12-06T21:18:56.101041  - 'ElementAnnotation' is from 'package:analyzer/dart/element/element.dart' ('/Users/hari/.pub-cache/hosted/pub.dev/analyzer-6.4.1/lib/dart/element/element.dart').
+[custom_lint] 2025-12-06T21:18:56.101041         final libVisibility = visibilityFromAnnotations(directive.metadata);
+[custom_lint] 2025-12-06T21:18:56.101041                                                                   ^
+[custom_lint] 2025-12-06T21:18:56.101041 /Users/hari/proj/dartv/lib/src/rules/more_visibility_rule.dart:139:62: Error: The argument type 'NodeList<Annotation>' can't be assigned to the parameter type 'Iterable<ElementAnnotation>'.
+[custom_lint] 2025-12-06T21:18:56.101041  - 'NodeList' is from 'package:analyzer/src/dart/ast/ast.dart' ('/Users/hari/.pub-cache/hosted/pub.dev/analyzer-6.4.1/lib/src/dart/ast/ast.dart').
+[custom_lint] 2025-12-06T21:18:56.101041  - 'Annotation' is from 'package:analyzer/src/dart/ast/ast.dart' ('/Users/hari/.pub-cache/hosted/pub.dev/analyzer-6.4.1/lib/src/dart/ast/ast.dart').
+[custom_lint] 2025-12-06T21:18:56.101041  - 'Iterable' is from 'dart:core'.
+[custom_lint] 2025-12-06T21:18:56.101041  - 'ElementAnnotation' is from 'package:analyzer/dart/element/element.dart' ('/Users/hari/.pub-cache/hosted/pub.dev/analyzer-6.4.1/lib/dart/element/element.dart').
+[custom_lint] 2025-12-06T21:18:56.101041       final visibility = visibilityFromAnnotations(directive.metadata);
+[custom_lint] 2025-12-06T21:18:56.101041                                                              ^
+[custom_lint] 2025-12-06T21:18:56.101041 /Users/hari/proj/dartv/lib/src/utils/annotation_utils.dart:30:34: Error: The argument type 'Element?' can't be assigned to the parameter type 'Element'.
+[custom_lint] 2025-12-06T21:18:56.101041  - 'Element' is from 'package:analyzer/dart/element/element.dart' ('/Users/hari/.pub-cache/hosted/pub.dev/analyzer-6.4.1/lib/dart/element/element.dart').
+[custom_lint] 2025-12-06T21:18:56.101041     final name = _annotationName(element);
+[custom_lint] 2025-12-06T21:18:56.101041                                  ^
+[custom_lint] 2025-12-06T21:18:56.101041
+[custom_lint] 2025-12-06T21:18:56.101041
+Failed to start pluginsThe request analysis.setContextRoots failed with the following error:
+RequestErrorCode.PLUGIN_ERROR
+Bad state: Failed to start the plugins.
+at:
+#0      SocketCustomLintServerToClientChannel._checkInitializationFail.<anonymous closure> (package:custom_lint/src/v2/server_to_client_channel.dart:223:11)
+<asynchronous suspension>
+#1      Future.any.onValue (dart:async/future.dart:616:5)
+<asynchronous suspension>
+
+[custom_lint] 2025-12-06T21:18:56.110627 _PrettyRequestFailure: {"code":"PLUGIN_ERROR","message":"Bad state: Failed to start the plugins.","stackTrace":"#0      SocketCustomLintServerToClientChannel._checkInitializationFail.<anonymous closure> (package:custom_lint/src/v2/server_to_client_channel.dart:223:11)\n<asynchronous suspension>\n#1      Future.any.onValue (dart:async/future.dart:616:5)\n<asynchronous suspension>\n"}
+[custom_lint] 2025-12-06T21:18:56.110627 #0      ChannelBase.sendRequest (package:custom_lint/src/server_isolate_channel.dart:82:7)
+[custom_lint] 2025-12-06T21:18:56.110627 <asynchronous suspension>
+[custom_lint] 2025-12-06T21:18:56.110627 #1      CustomLintRunner.initialize.<anonymous closure> (package:custom_lint/src/runner.dart:43:5)
+[custom_lint] 2025-12-06T21:18:56.110627 <asynchronous suspension>
+[custom_lint] 2025-12-06T21:18:56.110627 #2      _runServer.<anonymous closure> (package:custom_lint/custom_lint.dart:96:7)
+[custom_lint] 2025-12-06T21:18:56.110627 <asynchronous suspension>
+[custom_lint] 2025-12-06T21:18:56.110627 #3      _AsyncCompleter.complete (dart:async/future_impl.dart:96:3)
+[custom_lint] 2025-12-06T21:18:56.110627 <asynchronous suspension>
+[custom_lint] 2025-12-06T21:18:56.110627 #4      _runServer.<anonymous closure> (package:custom_lint/custom_lint.dart:126:19)
+[custom_lint] 2025-12-06T21:18:56.110627 <asynchronous suspension>
+[custom_lint] 2025-12-06T21:18:56.110627 #5      _runServer (package:custom_lint/custom_lint.dart:86:3)
+[custom_lint] 2025-12-06T21:18:56.110627 <asynchronous suspension>
+[custom_lint] 2025-12-06T21:18:56.110627 #6      customLint (package:custom_lint/custom_lint.dart:50:5)
+[custom_lint] 2025-12-06T21:18:56.110627 <asynchronous suspension>
+[custom_lint] 2025-12-06T21:18:56.110627 #7      entrypoint (file:///Users/hari/.pub-cache/hosted/pub.dev/custom_lint-0.6.4/bin/custom_lint.dart:68:3)
+[custom_lint] 2025-12-06T21:18:56.110627 <asynchronous suspension>
+[custom_lint] 2025-12-06T21:18:56.110627 #8      main (file:///Users/hari/.pub-cache/hosted/pub.dev/custom_lint-0.6.4/bin/custom_lint.dart:80:5)
+[custom_lint] 2025-12-06T21:18:56.110627 <asynchronous suspension>
+[custom_lint] 2025-12-06T21:18:56.110627
+[custom_lint] 2025-12-06T21:19:08.349884 Loading dynamic library failed: not a Mach-O shared object
+[custom_lint] 2025-12-06T21:19:08.349884 lib/custom_lint_client.dart is not an AOT snapshot, it cannot be run with 'dartaotruntime'
+[custom_lint] 2025-12-06T21:19:08.349884
+[custom_lint] 2025-12-06T21:19:08.349884
+Failed to start pluginsThe request analysis.setContextRoots failed with the following error:
+RequestErrorCode.PLUGIN_ERROR
+Bad state: Failed to start the plugins.
+at:
+#0      SocketCustomLintServerToClientChannel._checkInitializationFail.<anonymous closure> (package:custom_lint/src/v2/server_to_client_channel.dart:223)
+<asynchronous suspension>
+#1      Future.any.onValue (dart:async/future.dart:616)
+<asynchronous suspension>
+
+[custom_lint] 2025-12-06T21:23:14.546970 /Users/hari/proj/dartv/lib/src/utils/annotation_utils.dart:31:34: Error: The argument type 'Element?' can't be assigned to the parameter type 'Element'.
+[custom_lint] 2025-12-06T21:23:14.546970  - 'Element' is from 'package:analyzer/dart/element/element.dart' ('/Users/hari/.pub-cache/hosted/pub.dev/analyzer-6.4.1/lib/dart/element/element.dart').
+[custom_lint] 2025-12-06T21:23:14.546970     final name = _annotationName(element);
+[custom_lint] 2025-12-06T21:23:14.546970                                  ^
+[custom_lint] 2025-12-06T21:23:14.546970
+[custom_lint] 2025-12-06T21:23:14.546970
+Failed to start pluginsThe request analysis.setContextRoots failed with the following error:
+RequestErrorCode.PLUGIN_ERROR
+Bad state: Failed to start the plugins.
+at:
+#0      SocketCustomLintServerToClientChannel._checkInitializationFail.<anonymous closure> (package:custom_lint/src/v2/server_to_client_channel.dart:223:11)
+<asynchronous suspension>
+#1      Future.any.onValue (dart:async/future.dart:616:5)
+<asynchronous suspension>
+
+[custom_lint] 2025-12-06T21:23:14.556674 _PrettyRequestFailure: {"code":"PLUGIN_ERROR","message":"Bad state: Failed to start the plugins.","stackTrace":"#0      SocketCustomLintServerToClientChannel._checkInitializationFail.<anonymous closure> (package:custom_lint/src/v2/server_to_client_channel.dart:223:11)\n<asynchronous suspension>\n#1      Future.any.onValue (dart:async/future.dart:616:5)\n<asynchronous suspension>\n"}
+[custom_lint] 2025-12-06T21:23:14.556674 #0      ChannelBase.sendRequest (package:custom_lint/src/server_isolate_channel.dart:82:7)
+[custom_lint] 2025-12-06T21:23:14.556674 <asynchronous suspension>
+[custom_lint] 2025-12-06T21:23:14.556674 #1      CustomLintRunner.initialize.<anonymous closure> (package:custom_lint/src/runner.dart:43:5)
+[custom_lint] 2025-12-06T21:23:14.556674 <asynchronous suspension>
+[custom_lint] 2025-12-06T21:23:14.556674 #2      _runServer.<anonymous closure> (package:custom_lint/custom_lint.dart:96:7)
+[custom_lint] 2025-12-06T21:23:14.556674 <asynchronous suspension>
+[custom_lint] 2025-12-06T21:23:14.556674 #3      _AsyncCompleter.complete (dart:async/future_impl.dart:96:3)
+[custom_lint] 2025-12-06T21:23:14.556674 <asynchronous suspension>
+[custom_lint] 2025-12-06T21:23:14.556674 #4      _runServer.<anonymous closure> (package:custom_lint/custom_lint.dart:126:19)
+[custom_lint] 2025-12-06T21:23:14.556674 <asynchronous suspension>
+[custom_lint] 2025-12-06T21:23:14.556674 #5      _runServer (package:custom_lint/custom_lint.dart:86:3)
+[custom_lint] 2025-12-06T21:23:14.556674 <asynchronous suspension>
+[custom_lint] 2025-12-06T21:23:14.556674 #6      customLint (package:custom_lint/custom_lint.dart:50:5)
+[custom_lint] 2025-12-06T21:23:14.556674 <asynchronous suspension>
+[custom_lint] 2025-12-06T21:23:14.556674 #7      entrypoint (file:///Users/hari/.pub-cache/hosted/pub.dev/custom_lint-0.6.4/bin/custom_lint.dart:68:3)
+[custom_lint] 2025-12-06T21:23:14.556674 <asynchronous suspension>
+[custom_lint] 2025-12-06T21:23:14.556674 #8      main (file:///Users/hari/.pub-cache/hosted/pub.dev/custom_lint-0.6.4/bin/custom_lint.dart:80:5)
+[custom_lint] 2025-12-06T21:23:14.556674 <asynchronous suspension>
+[custom_lint] 2025-12-06T21:23:14.556674
+[custom_lint] 2025-12-06T21:30:03.027008 Loading dynamic library failed: not a Mach-O shared object
+[custom_lint] 2025-12-06T21:30:03.027008 lib/custom_lint_client.dart is not an AOT snapshot, it cannot be run with 'dartaotruntime'
+[custom_lint] 2025-12-06T21:30:03.027008
+[custom_lint] 2025-12-06T21:30:03.027008
+Failed to start pluginsThe request analysis.setContextRoots failed with the following error:
+RequestErrorCode.PLUGIN_ERROR
+Bad state: Failed to start the plugins.
+at:
+#0      SocketCustomLintServerToClientChannel._checkInitializationFail.<anonymous closure> (package:custom_lint/src/v2/server_to_client_channel.dart:223)
+<asynchronous suspension>
+#1      Future.any.onValue (dart:async/future.dart:616)
+<asynchronous suspension>
+
