@@ -1,11 +1,6 @@
-include: package:lints/recommended.yaml
-
-plugins:
-  more_visibility:
-    path: ../
+include: package:more_visibility/more_visibility.yaml
 
 analyzer:
   errors:
-    # Treat visibility violations as errors (default)
     more_visibility_protected: error
     more_visibility_module_default: error

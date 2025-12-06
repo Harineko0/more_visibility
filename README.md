@@ -10,19 +10,28 @@ more_visibility
 
 Analysis server plugin + post-process builder that brings Java-style "protected" and "default" visibility to Dart projects using the annotations `@mprotected` and `@mdefault`.
 
+## Table of contents
+- [Getting started](#getting-started)
+- [Annotations](#annotations)
+- [Configuring severity and disabling](#configuring-severity-and-disabling)
+- [Ignoring the rule](#ignoring-the-rule)
+- [Auto-annotating generated files](#auto-annotating-generated-files)
+- [Example project](#example-project)
+- [Testing](#testing)
+
 What it does
 ------------
 - `@mprotected`: declaration/file is usable from the same directory and any subdirectories.
 - `@mdefault`: declaration/file is usable **only** from the same directory.
-- Lint powered by `analysis_server_plugin` catches violations at analysis time in IDEs and `dart analyze`.
+- Analysis rule powered by `analysis_server_plugin` catches violations at analysis time in IDEs and `dart analyze`.
 - Post-process builder automatically stamps generated files (Riverpod, Freezed, etc.) with a file-level annotation so they obey the same visibility rules.
 
 Requirements
 ------------
 - Dart SDK 3.10.0 or later (Flutter SDK 3.38.0 or later)
 
-Quick start
------------
+Getting started
+---------------
 1. Add dependencies:
 ```yaml
 dependencies:
@@ -31,18 +40,15 @@ dev_dependencies:
   more_visibility: ^0.1.3 # analysis server plugin
   build_runner: any # if you want the auto-annotation builder
 ```
-2. Enable the plugin in `analysis_options.yaml`:
+2. Include the preset analysis options (enables the plugin, diagnostics on as errors by default):
 ```yaml
-plugins:
-  more_visibility: ^0.1.3
+include: package:more_visibility/more_visibility.yaml
 ```
-Or for local development:
-```yaml
-plugins:
-  more_visibility:
-    path: path/to/more_visibility
-```
-3. Annotate code:
+If you already include another lint bundle, copy the plugin block from `lib/all_visibility_rules.yaml` into your own `analysis_options.yaml`.
+
+Annotations
+-----------
+Mark declarations or files to scope their visibility:
 ```dart
 import 'package:more_visibility_annotation/more_visibility_annotation.dart';
 
@@ -52,20 +58,15 @@ final shared = 1;
 @mdefault // usable only inside this directory
 final local = 2;
 ```
-4. Run the lints:
-```
-dart analyze
-```
-Or your IDE will automatically show violations as you code.
 
-Configuring severity levels
-----------------------------
-By default, visibility violations are reported as **errors**. You can change the severity level in your `analysis_options.yaml`:
+Configuring severity and disabling
+----------------------------------
+Visibility violations default to **errors** (configured in `lib/all_visibility_rules.yaml`). Override per project:
 
 ```yaml
 analyzer:
   errors:
-    # Change all visibility violations to warnings
+    # Change visibility violations to warnings
     more_visibility_protected: warning
     more_visibility_module_default: warning
 
@@ -76,13 +77,24 @@ analyzer:
     # Or ignore completely
     more_visibility_protected: ignore
     more_visibility_module_default: ignore
+
+plugins:
+  more_visibility:
+    diagnostics:
+      # Disable the rule entirely
+      more_visibility: false
 ```
 
-Available severity levels:
-- `error` (default) - Causes analysis to fail
-- `warning` - Shown as warning, doesn't fail analysis by default
-- `info` - Informational only
-- `ignore` - Suppresses the diagnostic
+Ignoring the rule
+-----------------
+Use analysis ignores when you need an escape hatch:
+
+```dart
+// ignore_for_file: more_visibility_protected, more_visibility_module_default
+
+// ignore: more_visibility_protected
+final value = exposedFromSibling;
+```
 
 File-level annotations
 ----------------------
@@ -99,6 +111,7 @@ library feature_auth;
 Auto-annotating generated files
 -------------------------------
 Add the post-process builder so generated files copy the declaration-level visibility from their source part:
+
 ```yaml
 # build.yaml in your app/repo
 targets:
@@ -112,6 +125,7 @@ post_process_builders:
     options:
       visibility: mprotected # fallback if source has no annotated declaration
 ```
+
 Then run:
 ```
 dart run build_runner build --delete-conflicting-outputs
@@ -129,9 +143,3 @@ Run the package tests, which include an end-to-end lint invocation and builder c
 ```
 dart test
 ```
-
-More info
----------
-- `docs/usage.md`: setup steps and idioms
-- `docs/visibility_rules.md`: rule details and edge cases
-- `docs/auto_annotation.md`: builder options and integration notes

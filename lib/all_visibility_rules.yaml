@@ -1,0 +1,9 @@
+plugins:
+  more_visibility:
+    diagnostics:
+      more_visibility: true
+
+analyzer:
+  errors:
+    more_visibility_protected: error
+    more_visibility_module_default: error

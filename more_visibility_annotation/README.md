@@ -32,7 +32,10 @@ Usage
    @mdefault
    final local = 0;
    ```
-3. Enable lints by adding the `more_visibility` plugin plus `custom_lint` in your dev dependencies (in your main project).
+3. Enable the analyzer plugin in your main project (dev dependency on `more_visibility`):
+   ```yaml
+   include: package:more_visibility/more_visibility.yaml
+   ```
 
 Links
 -----

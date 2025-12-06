@@ -1,0 +1,5 @@
+include: all_visibility_rules.yaml
+
+plugins:
+  more_visibility:
+    path: ../../more_visibility

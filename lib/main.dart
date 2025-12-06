@@ -13,7 +13,7 @@ class MoreVisibilityPlugin extends Plugin {
 
   @override
   void register(PluginRegistry registry) {
-    // Register the visibility rule as a warning (enabled by default)
-    registry.registerWarningRule(MoreVisibilityRule());
+    // Register the visibility rule as an error (enabled by default)
+    registry.registerLintRule(MoreVisibilityRule());
   }
 }

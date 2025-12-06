@@ -5,17 +5,15 @@
 dependencies:
   more_visibility_annotation: ^0.1.0
 dev_dependencies:
-  more_visibility: ^0.1.0
-  custom_lint: any
+  more_visibility: ^0.1.3
 ```
 
 ## Enable the plugin
 `analysis_options.yaml`:
 ```yaml
-analyzer:
-  plugins:
-    - custom_lint
+include: package:more_visibility/more_visibility.yaml
 ```
+This enables the plugin and turns on the diagnostics as errors by default.
 
 ## Annotate declarations
 - `@mprotected`: usable from the declaration’s directory and its subdirectories.
@@ -44,7 +42,20 @@ final profileCache = <String, String>{}; // inherits @mprotected
 
 ## Run the lints
 ```
-dart run custom_lint
+dart analyze
+```
+Or rely on your IDE’s analysis server integration.
+
+## Configure severity
+```yaml
+analyzer:
+  errors:
+    more_visibility_protected: warning
+    more_visibility_module_default: warning
+plugins:
+  more_visibility:
+    diagnostics:
+      more_visibility: false # disable entirely
 ```
 
 ## Typical violations

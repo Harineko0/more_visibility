@@ -8,7 +8,7 @@ How to work locally
 - Install dependencies: `dart pub get` (and `dart pub get` in `example/`).
 - Format before sending changes: `dart format .`.
 - Run tests: `dart test`.
-- Run the lint against the example to verify rule output: `dart run custom_lint --path example`.
+- Run analyzer against the example to verify rule output: `dart analyze example`.
 
 Guidelines
 ----------
