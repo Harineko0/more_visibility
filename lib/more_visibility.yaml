@@ -1,6 +1,6 @@
 plugins:
   more_visibility:
-    path: ../../more_visibility
+    version: ^0.1.7
     diagnostics:
       more_visibility_protected: true
       more_visibility_module_default: true

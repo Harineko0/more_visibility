@@ -1,5 +1,6 @@
 import 'sub/internal.dart';
 
-final hitsProtected =
-    subProtected; // expect lint: @mprotected cannot escape dir
-final hitsDefault = subDefault; // expect lint: @mdefault cannot escape dir
+// expect lint: @mprotected cannot escape dir
+final hitsProtected = subProtected;
+// expect lint: @mdefault cannot escape dir
+final hitsDefault = subDefault;
