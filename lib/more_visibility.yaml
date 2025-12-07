@@ -1,5 +1,10 @@
-include: all_visibility_rules.yaml
-
 plugins:
   more_visibility:
     path: ../../more_visibility
+    diagnostics:
+      more_visibility_protected: true
+      more_visibility_module_default: true
+analyzer:
+  errors:
+    more_visibility_protected: error
+    more_visibility_module_default: error

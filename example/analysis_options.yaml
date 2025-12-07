@@ -1,6 +1,1 @@
 include: package:more_visibility/more_visibility.yaml
-
-analyzer:
-  errors:
-    more_visibility_protected: error
-    more_visibility_module_default: error

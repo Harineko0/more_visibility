@@ -13,12 +13,12 @@ import 'package:path/path.dart' as p;
 
 import '../utils/annotation_utils.dart';
 
-class MoreVisibilityRule extends AnalysisRule {
-  MoreVisibilityRule()
+class MoreVisibilityModuleDefaultRule extends AnalysisRule {
+  MoreVisibilityModuleDefaultRule()
     : super(
-        name: 'more_visibility',
+        name: _code.name,
         description:
-            'Enforces directory-scoped visibility via @mprotected and @mdefault annotations.',
+            'Enforces directory-scoped visibility via @mdefault annotations.',
       );
 
   late DiagnosticReporter _reporter;
@@ -29,23 +29,7 @@ class MoreVisibilityRule extends AnalysisRule {
     _reporter = value;
   }
 
-  static const _baseCode = LintCode(
-    'more_visibility',
-    'This declaration is not visible from the current file or directory.',
-    correctionMessage:
-        'Limit usage to files in the same directory (for @mdefault) or the same directory and subdirectories (for @mprotected).',
-    severity: DiagnosticSeverity.ERROR,
-  );
-
-  static const _protectedCode = LintCode(
-    'more_visibility_protected',
-    '`{0}` is @mprotected; only files in the same directory or subdirectories may access it. Declared at {1}.',
-    correctionMessage:
-        'Move the usage under the declaring directory or remove @mprotected.',
-    severity: DiagnosticSeverity.ERROR,
-  );
-
-  static const _defaultCode = LintCode(
+  static const _code = LintCode(
     'more_visibility_module_default',
     '`{0}` is @mdefault; only files in the same directory may access it. Declared at {1}.',
     correctionMessage:
@@ -54,10 +38,7 @@ class MoreVisibilityRule extends AnalysisRule {
   );
 
   @override
-  DiagnosticCode get diagnosticCode => _baseCode;
-
-  // Cache is now per-file instead of shared across all files
-  // This is managed by the visitor instance
+  DiagnosticCode get diagnosticCode => _code;
 
   @override
   void registerNodeProcessors(
@@ -84,7 +65,7 @@ class MoreVisibilityRule extends AnalysisRule {
 class _Visitor extends SimpleAstVisitor<void> {
   _Visitor(this.rule, this.context);
 
-  final MoreVisibilityRule rule;
+  final MoreVisibilityModuleDefaultRule rule;
   final RuleContext context;
   final _cache = _FileAnnotationCache();
 
@@ -124,28 +105,27 @@ class _Visitor extends SimpleAstVisitor<void> {
           rootElement.library?.metadata.annotations ?? const [],
         );
 
-    if (elementVisibility == null) return;
+    // Only check for @mdefault violations
+    if (elementVisibility != VisibilityKind.moduleDefault) return;
 
     final declDir = p.normalize(p.dirname(declSource.fullName));
     final useDir = p.normalize(p.dirname(useSource.fullName));
 
-    final allowed = switch (elementVisibility) {
-      VisibilityKind.protected =>
-        declDir == useDir || p.isWithin(declDir, useDir),
-      VisibilityKind.moduleDefault => declDir == useDir,
-    };
+    // @mdefault: only same directory
+    final allowed = declDir == useDir;
 
     if (allowed) return;
 
     final name = rootElement.displayName.isEmpty
         ? 'this symbol'
         : rootElement.displayName;
-    final code = elementVisibility == VisibilityKind.moduleDefault
-        ? MoreVisibilityRule._defaultCode
-        : MoreVisibilityRule._protectedCode;
 
-    // Report using the specific diagnostic code (not the base code)
-    rule.reportViolation(node, code, [name, declDir]);
+    // Report using the specific diagnostic code
+    rule.reportViolation(
+      node,
+      MoreVisibilityModuleDefaultRule._code,
+      [name, declDir],
+    );
   }
 
   Element? _topLevelElement(Element element) {

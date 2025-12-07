@@ -11,9 +11,6 @@ dependencies:
 dev_dependencies:
   lints: ^6.0.0
   more_visibility:
-    path: ..
+    path: ../
   test: ^1.28.0
 
-dependency_overrides:
-  more_visibility:
-    path: ..
