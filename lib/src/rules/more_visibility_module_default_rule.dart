@@ -121,11 +121,10 @@ class _Visitor extends SimpleAstVisitor<void> {
         : rootElement.displayName;
 
     // Report using the specific diagnostic code
-    rule.reportViolation(
-      node,
-      MoreVisibilityModuleDefaultRule._code,
-      [name, declDir],
-    );
+    rule.reportViolation(node, MoreVisibilityModuleDefaultRule._code, [
+      name,
+      declDir,
+    ]);
   }
 
   Element? _topLevelElement(Element element) {
