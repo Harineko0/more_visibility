@@ -2,6 +2,8 @@
 
 Generated code (Freezed, Riverpod, JsonSerializable, etc.) often lands in `*.g.dart` or related files. To keep visibility consistent, the `more_visibility` post-process builder copies the first declaration-level visibility annotation (`@mprotected` or `@mdefault`) from the source part file into the generated file so generated declarations share the same scope. File-level annotations are not copied (the analyzer already shares library-level annotations across parts).
 
+**Note:** The auto-annotation builder only handles `@mprotected` and `@mdefault` annotations. The `directory_private` rule is enforced automatically based on directory names (no annotations needed), so generated files in `_*` directories are automatically subject to the same depth restrictions.
+
 ## Enable
 Add to your project’s `build.yaml`:
 ```yaml

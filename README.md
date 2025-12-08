@@ -8,11 +8,14 @@
 more_visibility
 ================
 
-Analysis server plugin + post-process builder that brings Java-style "protected" and "default" visibility to Dart projects using the annotations `@mprotected` and `@mdefault`.
+Analysis server plugin + post-process builder that provides enhanced visibility control for Dart projects:
+- Java-style "protected" and "default" visibility using `@mprotected` and `@mdefault` annotations
+- Directory-private enforcement for underscore-prefixed directories (e.g., `_components`, `_hooks`)
 
 ## Table of contents
 - [Getting started](#getting-started)
 - [Annotations](#annotations)
+- [Directory-private](#directory-private)
 - [Configuring severity and disabling](#configuring-severity-and-disabling)
 - [Ignoring the rule](#ignoring-the-rule)
 - [Auto-annotating generated files](#auto-annotating-generated-files)
@@ -23,6 +26,8 @@ What it does
 ------------
 - `@mprotected`: declaration/file is usable from the same directory and any subdirectories.
 - `@mdefault`: declaration/file is usable **only** from the same directory.
+- **Directory-private** (automatic): underscore-prefixed directories like `_components` or `_hooks` are only accessible from files at the same package depth.
+  - Example: `lib/pages/_components/button.dart` can be imported by `lib/pages/page.dart` or `lib/pages/_hooks/use_foo.dart`, but NOT by `lib/bar.dart` or `lib/pages/profile/page.dart`.
 - Analysis rule powered by `analysis_server_plugin` catches violations at analysis time in IDEs and `dart analyze`.
 - Post-process builder automatically stamps generated files (Riverpod, Freezed, etc.) with a file-level annotation so they obey the same visibility rules.
 
@@ -59,30 +64,84 @@ final shared = 1;
 final local = 2;
 ```
 
+Directory-private
+-----------------
+Files in underscore-prefixed directories (like `_components`, `_hooks`, `_utils`) are automatically restricted to files at the same package depth. **No annotations required** — this rule is enforced automatically.
+
+### How it works
+A file inside a private directory can only be imported by files whose "package directory" (the path before any `_*` directory) matches.
+
+### Examples
+
+**Project structure:**
+```
+lib/
+├── bar.dart
+└── pages/
+    ├── page.dart
+    ├── _components/
+    │   └── button.dart
+    ├── _hooks/
+    │   └── use_something.dart
+    └── profile/
+        └── page.dart
+```
+
+**Allowed imports:**
+```dart
+// lib/pages/page.dart
+import '_components/button.dart'; // ✅ Same depth (lib/pages/)
+
+// lib/pages/_hooks/use_something.dart
+import '../_components/button.dart'; // ✅ Same depth (lib/pages/)
+```
+
+**Blocked imports:**
+```dart
+// lib/bar.dart
+import 'pages/_components/button.dart'; // ❌ Different depth (lib/ vs lib/pages/)
+
+// lib/pages/profile/page.dart
+import '../_components/button.dart'; // ❌ Different depth (lib/pages/profile/ vs lib/pages/)
+```
+
+### Error severity
+The `directory_private` rule defaults to **error** severity and will fail CI builds. Configure in `analysis_options.yaml`:
+```yaml
+analyzer:
+  errors:
+    directory_private: warning # or info, or ignore
+```
+
 Configuring severity and disabling
 ----------------------------------
-Visibility violations default to **errors** (configured in `lib/all_visibility_rules.yaml`). Override per project:
+Visibility violations default to **errors** (configured in `lib/more_visibility.yaml`). Override per project:
 
 ```yaml
 analyzer:
   errors:
     # Change visibility violations to warnings
+    directory_private: warning
     more_visibility_protected: warning
     more_visibility_module_default: warning
 
     # Or set to info (won't fail CI)
+    directory_private: info
     more_visibility_protected: info
     more_visibility_module_default: info
 
     # Or ignore completely
+    directory_private: ignore
     more_visibility_protected: ignore
     more_visibility_module_default: ignore
 
 plugins:
   more_visibility:
     diagnostics:
-      # Disable the rule entirely
-      more_visibility: false
+      # Disable individual rules
+      directory_private: false
+      more_visibility_protected: false
+      more_visibility_module_default: false
 ```
 
 Ignoring the rule
@@ -90,7 +149,10 @@ Ignoring the rule
 Use analysis ignores when you need an escape hatch:
 
 ```dart
-// ignore_for_file: more_visibility_protected, more_visibility_module_default
+// ignore_for_file: directory_private, more_visibility_protected, more_visibility_module_default
+
+// ignore: directory_private
+import 'pages/_components/button.dart'; // bypass directory-private check
 
 // ignore: more_visibility_protected
 final value = exposedFromSibling;
