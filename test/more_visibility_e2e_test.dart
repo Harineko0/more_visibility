@@ -39,6 +39,11 @@ void main() {
         contains('more_visibility_protected'),
         reason: 'Expected @mprotected violation in output.\n$output',
       );
+      expect(
+        output,
+        contains('directory_private'),
+        reason: 'Expected directory_private violation in output.\n$output',
+      );
     });
   });
 }

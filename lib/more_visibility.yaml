@@ -2,9 +2,11 @@ plugins:
   more_visibility:
     version: ^0.1.7
     diagnostics:
+      directory_private: true
       more_visibility_protected: true
       more_visibility_module_default: true
 analyzer:
   errors:
+    directory_private: error
     more_visibility_protected: error
     more_visibility_module_default: error

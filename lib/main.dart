@@ -1,6 +1,7 @@
 import 'package:analysis_server_plugin/plugin.dart';
 import 'package:analysis_server_plugin/registry.dart';
 
+import 'src/rules/directory_private_rule.dart';
 import 'src/rules/more_visibility_module_default_rule.dart';
 import 'src/rules/more_visibility_protected_rule.dart';
 
@@ -15,6 +16,7 @@ class MoreVisibilityPlugin extends Plugin {
   @override
   void register(PluginRegistry registry) {
     registry
+      ..registerLintRule(DirectoryPrivateRule())
       ..registerLintRule(MoreVisibilityProtectedRule())
       ..registerLintRule(MoreVisibilityModuleDefaultRule());
   }

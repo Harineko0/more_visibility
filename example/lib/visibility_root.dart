@@ -7,4 +7,3 @@ final protectedValue = 1;
 
 @mdefault
 final defaultValue = 2;
-
