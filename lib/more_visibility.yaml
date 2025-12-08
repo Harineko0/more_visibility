@@ -1,6 +1,6 @@
 plugins:
   more_visibility:
-    version: ^0.1.8
+    version: ^0.1.9
     diagnostics:
       directory_private: true
       more_visibility_protected: true

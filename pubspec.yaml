@@ -1,6 +1,6 @@
 name: more_visibility
 description: "Analysis server plugin and builder bringing directory-scoped visibility via @mprotected and @mdefault annotations."
-version: 0.1.8
+version: 0.1.9
 repository: https://github.com/Harineko0/more_visibility
 
 environment:
