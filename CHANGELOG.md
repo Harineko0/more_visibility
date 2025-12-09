@@ -1,3 +1,10 @@
+## 0.1.10
+
+- **Breaking change**: `directory_private` rule now only applies to application code, not dependencies.
+  - Dependencies (files in `.pub-cache` or `.dart-tool`) are now excluded from directory-private enforcement.
+  - This fixes false positives when using packages that export modules from underscore-prefixed directories (e.g., `package:foo/_internal/bar.dart`).
+  - Application code in `lib/`, `test/`, etc. continues to be checked as before.
+
 ## 0.1.8
 
 - Add `directory_private` rule: directories with underscore prefix (e.g., `_components`, `_hooks`) are only accessible from files at the same package depth.

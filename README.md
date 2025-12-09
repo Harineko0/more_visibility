@@ -1,207 +1,276 @@
 <div align="center">
-<img src="https://img.shields.io/pub/v/more_visibility?label=pub&logo=dart&logoColor=white" alt="Pub">
-<img src="https://github.com/Harineko0/more_visibility/actions/workflows/ci.yml/badge.svg?branch=main" alt="CI">
-<img src="https://img.shields.io/badge/dart-%E2%89%A53.10-blue" alt="Dart SDK">
-<img src="https://img.shields.io/badge/license-MIT-green" alt="License: MIT">
+
+# more_visibility
+
+**Fine-grained visibility control for Dart & Flutter projects**
+
+[![Pub Version](https://img.shields.io/pub/v/more_visibility?label=pub&logo=dart&logoColor=white)](https://pub.dev/packages/more_visibility)
+[![CI](https://github.com/Harineko0/more_visibility/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/Harineko0/more_visibility/actions)
+[![Dart SDK](https://img.shields.io/badge/dart-%E2%89%A53.10-blue)](https://dart.dev)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green)](https://opensource.org/licenses/MIT)
+
 </div>
 
-more_visibility
-================
+---
 
-Analysis server plugin + post-process builder that provides enhanced visibility control for Dart projects:
-- Java-style "protected" and "default" visibility using `@mprotected` and `@mdefault` annotations
-- Directory-private enforcement for underscore-prefixed directories (e.g., `_components`, `_hooks`)
+## Why more_visibility?
 
-## Table of contents
-- [Getting started](#getting-started)
-- [Annotations](#annotations)
-- [Directory-private](#directory-private)
-- [Configuring severity and disabling](#configuring-severity-and-disabling)
-- [Ignoring the rule](#ignoring-the-rule)
-- [Auto-annotating generated files](#auto-annotating-generated-files)
-- [Example project](#example-project)
-- [Testing](#testing)
+Dart's built-in visibility is limited to **library-private** (`_identifier`) and **public** (everything else). This works for small projects, but as codebases grow, you often need finer control:
 
-What it does
-------------
-- `@mprotected`: declaration/file is usable from the same directory and any subdirectories.
-- `@mdefault`: declaration/file is usable **only** from the same directory.
-- **Directory-private** (automatic): underscore-prefixed directories like `_components` or `_hooks` are only accessible from files at the same package depth.
-  - Example: `lib/pages/_components/button.dart` can be imported by `lib/pages/page.dart` or `lib/pages/_hooks/use_foo.dart`, but NOT by `lib/bar.dart` or `lib/pages/profile/page.dart`.
-- Analysis rule powered by `analysis_server_plugin` catches violations at analysis time in IDEs and `dart analyze`.
-- Post-process builder automatically stamps generated files (Riverpod, Freezed, etc.) with a file-level annotation so they obey the same visibility rules.
+- 🚫 Prevent accidental imports of internal utilities from parent directories
+- 🔒 Keep implementation details scoped to feature modules
+- 📁 Enforce architectural boundaries within your codebase
 
-Requirements
-------------
-- Dart SDK 3.10.0 or later (Flutter SDK 3.38.0 or later)
+**more_visibility** brings Java-style visibility modifiers and automatic directory-private enforcement to Dart, making your codebase more maintainable and preventing architectural drift.
 
-Getting started
----------------
-1. Add dependencies:
+---
+
+## ✨ Features
+
+- 🎯 **Directory-private enforcement** — Underscore-prefixed directories (`_components`, `_hooks`) are automatically restricted to same-level imports. **Zero configuration.**
+- 🛡️ **Java-style annotations** — `@mprotected` and `@mdefault` for fine-grained control over symbol visibility
+- ⚡ **Real-time feedback** — Analysis server plugin catches violations in your IDE as you type
+- 🔧 **Works with code generation** — Auto-annotates generated files from Freezed, Riverpod, JsonSerializable, etc.
+- 🎨 **Configurable severity** — Set rules as errors, warnings, or info based on your needs
+
+---
+
+## 🚀 Quick Start
+
+### 1. Install
+
+Add to your `pubspec.yaml`:
+
 ```yaml
 dependencies:
   more_visibility_annotation: ^0.1.0
+
 dev_dependencies:
-  more_visibility: ^0.1.3 # analysis server plugin
-  build_runner: any # if you want the auto-annotation builder
+  more_visibility: ^0.1.10
 ```
-2. Include the preset analysis options (enables the plugin, diagnostics on as errors by default):
+
+### 2. Enable the plugin
+
+In your `analysis_options.yaml`:
+
 ```yaml
 include: package:more_visibility/more_visibility.yaml
 ```
-If you already include another lint bundle, copy the plugin block from `lib/all_visibility_rules.yaml` into your own `analysis_options.yaml`.
 
-Annotations
------------
-Mark declarations or files to scope their visibility:
-```dart
-import 'package:more_visibility_annotation/more_visibility_annotation.dart';
+That's it! The plugin is now active and will enforce visibility rules.
 
-@mprotected // usable from lib/ and lib/**
-final shared = 1;
+---
 
-@mdefault // usable only inside this directory
-final local = 2;
-```
+## 📖 Usage
 
-Directory-private
------------------
-Files in underscore-prefixed directories (like `_components`, `_hooks`, `_utils`) are automatically restricted to files at the same package depth. **No annotations required** — this rule is enforced automatically.
+### Directory-private (Automatic)
 
-### How it works
-A file inside a private directory can only be imported by files whose "package directory" (the path before any `_*` directory) matches.
+Simply prefix directories with `_` to make them private to their parent directory:
 
-### Examples
-
-**Project structure:**
 ```
 lib/
-├── bar.dart
-└── pages/
-    ├── page.dart
-    ├── _components/
-    │   └── button.dart
-    ├── _hooks/
-    │   └── use_something.dart
-    └── profile/
-        └── page.dart
+├── pages/
+│   ├── page.dart              ✅ Can import _components/
+│   ├── _components/
+│   │   └── button.dart        🔒 Private to lib/pages/
+│   └── profile/
+│       └── profile_page.dart  ❌ Cannot import _components/
 ```
 
-**Allowed imports:**
-```dart
-// lib/pages/page.dart
-import '_components/button.dart'; // ✅ Same depth (lib/pages/)
-
-// lib/pages/_hooks/use_something.dart
-import '../_components/button.dart'; // ✅ Same depth (lib/pages/)
-```
-
-**Blocked imports:**
-```dart
-// lib/bar.dart
-import 'pages/_components/button.dart'; // ❌ Different depth (lib/ vs lib/pages/)
-
-// lib/pages/profile/page.dart
-import '../_components/button.dart'; // ❌ Different depth (lib/pages/profile/ vs lib/pages/)
-```
-
-### Error severity
-The `directory_private` rule defaults to **error** severity and will fail CI builds. Configure in `analysis_options.yaml`:
-```yaml
-analyzer:
-  errors:
-    directory_private: warning # or info, or ignore
-```
-
-Configuring severity and disabling
-----------------------------------
-Visibility violations default to **errors** (configured in `lib/more_visibility.yaml`). Override per project:
-
-```yaml
-analyzer:
-  errors:
-    # Change visibility violations to warnings
-    directory_private: warning
-    more_visibility_protected: warning
-    more_visibility_module_default: warning
-
-    # Or set to info (won't fail CI)
-    directory_private: info
-    more_visibility_protected: info
-    more_visibility_module_default: info
-
-    # Or ignore completely
-    directory_private: ignore
-    more_visibility_protected: ignore
-    more_visibility_module_default: ignore
-
-plugins:
-  more_visibility:
-    diagnostics:
-      # Disable individual rules
-      directory_private: false
-      more_visibility_protected: false
-      more_visibility_module_default: false
-```
-
-Ignoring the rule
------------------
-Use analysis ignores when you need an escape hatch:
+**Example:**
 
 ```dart
-// ignore_for_file: directory_private, more_visibility_protected, more_visibility_module_default
+// ✅ lib/pages/page.dart
+import '_components/button.dart'; // Same depth - OK
 
-// ignore: directory_private
-import 'pages/_components/button.dart'; // bypass directory-private check
-
-// ignore: more_visibility_protected
-final value = exposedFromSibling;
+// ❌ lib/pages/profile/profile_page.dart
+import '../_components/button.dart'; // Different depth - ERROR
 ```
 
-File-level annotations
-----------------------
-Annotate an entire file to give every declaration the same visibility:
+> **Note:** Only applies to your application code. Dependencies are excluded to avoid false positives.
+
+---
+
+### Annotation-based visibility
+
+Control individual declarations with annotations:
+
 ```dart
 import 'package:more_visibility_annotation/more_visibility_annotation.dart';
 
+// 🛡️ Protected: accessible from this directory and subdirectories
+@mprotected
+final sharedConfig = Config();
+
+// 🔒 Module-default: accessible only within this directory
+@mdefault
+final localHelper = Helper();
+```
+
+**File-level annotations:**
+
+```dart
 @mprotected
 library feature_auth;
 
-// Everything in this file inherits the @mprotected rule.
+// All declarations inherit @mprotected
+class AuthService { }
+final authToken = '';
 ```
 
-Auto-annotating generated files
--------------------------------
-Add the post-process builder so generated files copy the declaration-level visibility from their source part:
+---
+
+## 🎨 Visual Examples
+
+### Before more_visibility
+
+```dart
+// lib/utils/internal_helper.dart
+String formatSecret(String secret) => '***$secret***';
+
+// lib/features/auth/login.dart
+import '../../utils/internal_helper.dart'; // ⚠️ Unintended coupling
+
+// lib/main.dart
+import 'utils/internal_helper.dart'; // ⚠️ Internal API exposed
+```
+
+**Problems:**
+- No enforcement of architectural boundaries
+- Internal utilities leak across module boundaries
+- Difficult to refactor without breaking unknown dependents
+
+### After more_visibility
+
+```dart
+// lib/utils/_internal/helper.dart (in private directory)
+String formatSecret(String secret) => '***$secret***';
+
+// lib/features/auth/login.dart
+import '../../utils/_internal/helper.dart'; // ❌ Compile-time error!
+// Error: `formatSecret` is in a private directory `/lib/utils/_internal`
+
+// lib/utils/public_api.dart
+import '_internal/helper.dart'; // ✅ Same depth - OK
+export '_internal/helper.dart' show allowedFunction;
+```
+
+**Benefits:**
+- ✅ Architectural boundaries enforced at compile-time
+- ✅ Clear separation between public API and internal implementation
+- ✅ Refactoring is safer with explicit visibility scopes
+
+---
+
+## 📚 Documentation
+
+| Topic | Description |
+|-------|-------------|
+| [Visibility Rules](docs/visibility_rules.md) | Detailed explanation of all visibility rules |
+| [Usage Guide](docs/usage.md) | Step-by-step usage instructions and patterns |
+| [Auto-annotation](docs/auto_annotation.md) | Configuring builders for generated code |
+
+---
+
+## ⚙️ Configuration
+
+### Adjusting severity
 
 ```yaml
-# build.yaml in your app/repo
-targets:
-  $default:
-    builders:
-      more_visibility:auto_annotate:
-        enabled: true
+analyzer:
+  errors:
+    directory_private: warning                  # Default: error
+    more_visibility_protected: info             # Default: error
+    more_visibility_module_default: ignore      # Disable completely
+```
 
+### Disabling rules
+
+```yaml
+plugins:
+  more_visibility:
+    diagnostics:
+      directory_private: false              # Disable directory-private rule
+      more_visibility_protected: false      # Disable @mprotected checks
+```
+
+### Ignoring specific violations
+
+```dart
+// ignore_for_file: directory_private
+
+// ignore: more_visibility_protected
+import '../protected_api.dart';
+```
+
+---
+
+## 🔧 Auto-annotation for Generated Code
+
+Works seamlessly with Freezed, Riverpod, JsonSerializable, and other code generators.
+
+**build.yaml:**
+
+```yaml
 post_process_builders:
   more_visibility:auto_annotate:
     options:
-      visibility: mprotected # fallback if source has no annotated declaration
+      visibility: mprotected  # Default annotation for generated files
 ```
 
-Then run:
-```
-dart run build_runner build --delete-conflicting-outputs
-```
-The builder inserts `@mprotected` (or `@mdefault`) at the top of matching generated files (`*.g.dart`, `*.freezed.dart`, `*.riverpod.dart`) unless they are already annotated.
-The builder copies the first declaration-level `@mprotected`/`@mdefault` from the source part file into the generated file (after `part of`), so generated declarations share the same visibility. File-level annotations are not copied because parts share library metadata automatically.
+Generated files automatically inherit visibility from their source files:
 
-Example project
----------------
-See `example/` for a minimal project showing allowed/blocked usages and how the lint reports violations.
+```dart
+// user.dart
+@mprotected
+@freezed
+class User with _$User {
+  // ...
+}
 
-Testing
--------
-Run the package tests, which include an end-to-end lint invocation and builder coverage:
+// user.freezed.dart (generated)
+@mprotected  // ← Automatically added
+part of 'user.dart';
+// ...
 ```
-dart test
-```
+
+---
+
+## 📦 Requirements
+
+- **Dart SDK:** 3.10.0 or later
+- **Flutter SDK:** 3.38.0 or later (if using Flutter)
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit issues or pull requests.
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+## 🌟 Star History
+
+If you find this package useful, please consider giving it a star on [GitHub](https://github.com/Harineko0/more_visibility)!
+
+---
+
+<div align="center">
+
+**Made with ❤️ for the Dart & Flutter community**
+
+[Documentation](docs/) • [Issues](https://github.com/Harineko0/more_visibility/issues) • [Pub.dev](https://pub.dev/packages/more_visibility)
+
+</div>

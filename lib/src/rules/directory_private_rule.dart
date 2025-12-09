@@ -84,6 +84,9 @@ class _Visitor extends SimpleAstVisitor<void> {
     final declSource = rootElement.firstFragment.libraryFragment?.source;
     if (declSource == null || declSource.fullName.isEmpty) return;
 
+    // Skip enforcement for dependencies (only apply to application code)
+    if (_isFromDependency(declSource.fullName)) return;
+
     final useUnit = node.root is CompilationUnit
         ? node.root as CompilationUnit
         : null;
@@ -163,6 +166,14 @@ class _Visitor extends SimpleAstVisitor<void> {
     final normalizedPackageDir = p.normalize(packageDir);
 
     return normalizedUsePackageDir == normalizedPackageDir;
+  }
+
+  /// Returns true if the file path is from a dependency (not application code).
+  /// Dependencies are typically in .pub-cache or .dart-tool directories.
+  bool _isFromDependency(String filePath) {
+    final normalizedPath = p.normalize(filePath);
+    return normalizedPath.contains('.pub-cache') ||
+        normalizedPath.contains('.dart-tool');
   }
 
   Element? _topLevelElement(Element element) {

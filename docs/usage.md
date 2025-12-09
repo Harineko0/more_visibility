@@ -5,7 +5,7 @@
 dependencies:
   more_visibility_annotation: ^0.1.0
 dev_dependencies:
-  more_visibility: ^0.1.3
+  more_visibility: ^0.1.10
 ```
 
 ## Enable the plugin
@@ -30,6 +30,8 @@ lib/
 ```
 
 No annotations needed — the `directory_private` rule is enforced automatically for any directory starting with `_`.
+
+**Note:** This rule only applies to application code (your project's `lib/`, `test/`, etc.). Dependencies in `.pub-cache` or `.dart-tool` are excluded from enforcement.
 
 ## Annotate declarations
 - `@mprotected`: usable from the declaration's directory and its subdirectories.
